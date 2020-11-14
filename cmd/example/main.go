@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"strings"
 	lab2 "github.com/roman-mazur/architecture-lab-2"
 )
 
@@ -21,7 +23,15 @@ func main() {
 	//           Output: {construct io.Writer according the command line parameters},
 	//       }
 	//       err := handler.Compute()
-
-	res, _ := lab2.PrefixToPostfix("+ 2 2")
-	fmt.Println(res)
+	handler := &lab2.ComputeHandler{
+		Input: strings.NewReader(*inputExpression), 
+		Output: os.Stdout,
+	}
+	err := handler.Compute() 
+	if err != nil {
+		fmt.Println(err)
+	}
 }
+
+
+
