@@ -20,20 +20,33 @@ type chunk struct {
 	priority uint8
 }
 
+func popChunck (stack *list.List) (chunk, error) {
+	lastElem := stack.Back()
+	if lastElem == nil {
+		return chunk{[]string{""}, 0}, errors.New("Algorithm error: invalid expression")
+	}
+	return stack.Remove(lastElem).(chunk), nil
+} 
+
 func PostfixToInfix(postfixExp string) (string, error) {
 	stack := list.New()
-	stack.PushBack(chunk{[]string{""}, 0})
 	symbols := strings.Split(postfixExp, " ")
 	for i := 0; i < len(symbols); i++ {
 		symbol := symbols[i]
 		if symbol == "+" || symbol == "-" || symbol == "*" || symbol == "/" || symbol == "^" {
-			rightChunk := stack.Remove(stack.Back()).(chunk)
+			rightChunk, err := popChunck(stack)
+			if err != nil {
+				return "", err
+			}
 			if rightChunk.priority <  priorities[symbol] && rightChunk.priority != 0 {
 				tmp := []string{"("}
 				rightChunk.exp = append(tmp, rightChunk.exp...)
 				rightChunk.exp = append(rightChunk.exp, ")")
 			}
-			leftChunk := stack.Remove(stack.Back()).(chunk)
+			leftChunk, err := popChunck(stack)
+			if err != nil {
+				return "", err
+			}
 			if leftChunk.priority < priorities[symbol] && leftChunk.priority != 0 {
 				tmp := []string{"("}
 				leftChunk.exp = append(tmp, leftChunk.exp...)
@@ -47,13 +60,16 @@ func PostfixToInfix(postfixExp string) (string, error) {
 			continue
 		} else {
 			symbol, err := strconv.ParseFloat(symbol, 64)
-			if err == nil {
+			if err != nil {
+				return "", errors.New("Algorithm error: invalid symbol")
+			} else {
 				symbol := strconv.FormatFloat(symbol, 'G', -1, 64)
 				stack.PushBack(chunk{[]string{symbol}, 0})
-			} else {
-				return "", errors.New("Error: invalid symbol")
 			}
 		}
+	}
+	if stack.Len() > 1 {
+		return "", errors.New("Algorithm error: invalid expression")
 	}
 	infixExp := stack.Back().Value.(chunk).exp
 	return strings.Join(infixExp, ""), nil
