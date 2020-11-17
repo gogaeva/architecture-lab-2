@@ -17,31 +17,35 @@ var (
 
 func main() {
 	var (
-		input io.Reader = os.Stdin
-		output io.Writer = os.Stdout
+		input io.Reader
+		output io.Writer
 		err error
 	)
 	flag.Parse()
+
 	if *inputExpression != "" {
 		input = strings.NewReader(*inputExpression) 
-	}
-	if *inputFile != "" {
+	} else if *inputFile != "" {
 		input, err = os.Open(*inputFile)
 		if err != nil {
 			fmt.Println("Error opening file: ", err)
 			os.Exit(1)
 		}
+	} else {
+		input = os.Stdin
+		fmt.Println("Enter your expressions. Press ctrl+D to end")
 	}
+
 	if *outputFile != "" {
-		output, err = os.Open(*outputFile)
+		output, err = os.OpenFile(*outputFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 		if err != nil {
-			output, err = os.Create(*outputFile)
-			if err != nil {
-				fmt.Println("Error creating file: ", err)
-				os.Exit(1)
-			}
+			fmt.Println(err)
+			os.Exit(1)
 		}
+	} else {
+		output = os.Stdout
 	}
+	
 	handler := &lab2.ComputeHandler{
 		Input: input, 
 		Output: output,

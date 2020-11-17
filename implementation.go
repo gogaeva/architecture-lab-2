@@ -54,7 +54,7 @@ func PostfixToInfix(postfixExps string) (string, error) {
 				if leftChunk.priority < priorities[symbol] && leftChunk.priority != 0 {
 					leftChunk.exp = "(" + leftChunk.exp + ")"
 				}
-				newChunk := chunk{leftChunk.exp + symbol + rightChunk.exp, priorities[symbol]}
+				newChunk := chunk{leftChunk.exp + " " + symbol + " " + rightChunk.exp, priorities[symbol]}
 				stack.PushBack(newChunk)
 			} else if symbol == "" {
 				continue

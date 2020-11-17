@@ -21,7 +21,6 @@ func (ch *ComputeHandler) Compute() error {
 	if err != nil {
 		return err 
 	}
-	res += "\n"
 	_, err = io.WriteString(ch.Output, res)
 	if err != nil {
 		return err 
