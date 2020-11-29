@@ -7,19 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPostfixToInfix (t *testing.T) {
-	res, err := PostfixToInfix("4 22 - 3 * 5 +")
-	if assert.Nil(t, err) {
-		assert.Equal(t, "(4-22)*3+5", res)
-	}
-}
-
-// func TestConvert (t *testing.T) {
-// 	res, _ := Convert("4 22 - 3 * 5 +")
-// 	want := "(4-22)*3+5"
-// 	assert.Equal(t, res, want, "Incorrect result")
-// }
-
 func TestTablePostfixToInfix (t *testing.T) {
 	cases := []struct {
 		name string
@@ -30,27 +17,27 @@ func TestTablePostfixToInfix (t *testing.T) {
 		{
 			name: "simple",
 			arg: "4 22 - 3 * 5 +",
-			want: "(4-22)*3+5",
+			want: "(4 - 22) * 3 + 5\n",
 			err: nil,
 		},
 		{
 			name: "complicated",
 			arg: "8 2 5 * + 1 3 2 * + 4 - /",
-			want: "(8+2*5)/(1+3*2-4)",
+			want: "(8 + 2 * 5) / (1 + 3 * 2 - 4)\n",
 			err: nil,
 		},
 		{
 			name: "invalid symbols",
 			arg: "4 22 - 3 * g +",
 			want: "",
-			err: errors.New("Error: invalid symbol"),
+			err: errors.New("Algorithm error: invalid symbol"),
 		},
-		// {
-		// 	name: "invalid expression",
-		// 	arg: "8 2 5 * + 1 3 2 * +  - 4 - /",
-		// 	want: "",
-		// 	err: errors.New("Error: invalid expression (redundant symbols in expression)"),
-		// },
+		{
+			name: "invalid expression",
+			arg: "8 2 5 * + 1 3 2 * +  - 4 - /",
+			want: "",
+			err: errors.New("Algorithm error: invalid expression"),
+		},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -66,11 +53,17 @@ func TestTablePostfixToInfix (t *testing.T) {
 }
 
 func ExamplePostfixToInfix () {
-	res, _ := PostfixToInfix("2 2 +")
-	fmt.Println(res)
-
+	samples := []string{
+		"4 22 - 3 * 5 +",
+		"8 2 5 * + 1 3 2 * + 4 - /",
+	}
+	for _, sample := range samples {
+		res, _ := PostfixToInfix(sample)
+		fmt.Print(res)
+	}
 	// Output:
-	// 2+2
+	// (4 - 22) * 3 + 5
+	// (8 + 2 * 5) / (1 + 3 * 2 - 4)
 }
 
 func BenchmarkPostfixToInfix (b *testing.B) {
