@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [testing]
     steps:
-      #- name: clean
-      #  run: make clean
+      - name: clean
+        run: make clean
       - name: build
         run: make out/example
     
