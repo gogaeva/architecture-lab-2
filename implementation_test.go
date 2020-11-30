@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 	"errors"
-	"github.com/stretchr/testify/assert"
+	//"github.com/stretchr/testify/assert"
 )
 
 func TestTablePostfixToInfix (t *testing.T) {
