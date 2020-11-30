@@ -4,8 +4,28 @@ import (
 	"fmt"
 	"testing"
 	"errors"
-	//"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
+
+func TestPostfixToInfix_Assert (t *testing.T) {
+    cases := map [string] string {
+      "4 22 - 3 * 5 +" : "(4 - 22) * 3 + 5\n",
+      "8 2 5 * + 1 3 2 * + 4 - /" : "(8 + 2 * 5) / (1 + 3 * 2 - 4)\n",
+      "4 22 - 3 * g +" : "Algorithm error: invalid symbol",
+      "8 2 5 * + 1 3 2 * +  - 4 - /" : "Algorithm error: invalid expression",
+      "14.88 13.37 2.28 * + 15.3 1 ^ -" : "14.88 + 13.37 * 2.28 - 15.3 ^ 1\n",
+      "222.2 52.2 - 13.67 45.2 * 2 / -" : "222.2 - 52.2 - 13.67 * 45.2 / 2\n",
+      
+    }
+  for input, want := range cases {
+    res, err := PostfixToInfix(input)
+    if err == nil {
+      assert.Equal(t, want, res)
+    } else {
+      assert.EqualError(t, err, want)
+    }
+  }
+}
 
 func TestTablePostfixToInfix (t *testing.T) {
 	cases := []struct {
