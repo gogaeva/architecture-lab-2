@@ -1,0 +1,20 @@
+name: CI
+on: [push, pull_request]   
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone
+      - uses: actions/checkout@v2
+      - name: test
+        run: make test
+  building:
+    runs-on: ubuntu-latest
+    needs: [testing]
+    steps:
+      - name: clean
+        run: make clean
+      - name: build
+        run: make out/example
+    
+    
