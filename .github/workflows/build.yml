@@ -2,7 +2,7 @@ name: CI
 on: [push, pull_request]   
 jobs:
   testing:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: clone
         uses: actions/checkout@v2
@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [testing]
     steps:
-      - name: clean
-        run: make clean
+      #- name: clean
+      #  run: make clean
       - name: build
         run: make out/example
     
