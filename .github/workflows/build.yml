@@ -9,11 +9,13 @@ jobs:
       - name: test
         run: make test
   building:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: [testing]
     steps:
-      #- name: clean
-      #  run: make clean
+      - name: clone
+        uses: actions/checkout@v2
+      - name: clean
+        run: make clean
       - name: build
         run: make out/example
     
