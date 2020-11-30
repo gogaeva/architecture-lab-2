@@ -1,4 +1,4 @@
-Шаблон для 2-гої роботи з архітектури ПЗ
+Lab2 
 ---
-
-Використайте кнопку **"Use this template"**, щоб створити власний репозиторій.
+* build unsuccessful: https://github.com/gogaeva/architecture-lab-2/actions/runs/391913106
+* build successful: https://github.com/gogaeva/architecture-lab-2/actions/runs/391925944
